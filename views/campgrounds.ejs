@@ -1,6 +1,10 @@
+<% include partials/header.ejs %>
 <h2>Campground page...</h2>
+
+<a href="/campgrounds/new">Add new Campground</a>
 
 <% for (let camp of campgrounds) {%>
     <h3><%= camp.name %></h3>
     <img src="<%= camp.src %>" alt="">
 <% } %>
+<% include partials/footer.ejs %>
