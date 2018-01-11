@@ -15,6 +15,7 @@ mongoose.connect('mongodb://localhost/yelp_camp', {
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.set('view engine', 'ejs')
+app.use(express.static(__dirname + '/public'))
 
 app.get('/', (req, res) => {
   res.render('landing-page')
@@ -81,7 +82,7 @@ app.post('/campgrounds/:id/comments', (req, res) => {
           console.log(err)
           res.redirect('/campgrounds/' + req.params.id)
         } else {
-          campground.comments.push(comment)
+          campground.comments.push(comment._id)
           campground.save()
           res.redirect('/campgrounds/' + req.params.id)
         }

@@ -11,6 +11,6 @@ const campgroundSchema = mongoose.Schema({
       ref: 'Comment',
     }
   ],
-})
+}, { usePushEach: true })
 
 module.exports = mongoose.model('Campground', campgroundSchema)
