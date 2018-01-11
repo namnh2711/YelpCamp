@@ -1,8 +1,11 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
 const Campground = require('./models/campground')
 const CommentModel = require('./models/comment')
+const User = require('./models/user')
 const seedDB = require('./seeds')
 
 seedDB()
@@ -16,6 +19,18 @@ mongoose.connect('mongodb://localhost/yelp_camp', {
 app.use(bodyParser.urlencoded({extended: true}))
 app.set('view engine', 'ejs')
 app.use(express.static(__dirname + '/public'))
+
+// CONFIG PASSPORT
+app.use(require('express-session')({
+  secret: 'Anything here',
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 
 app.get('/', (req, res) => {
   res.render('landing-page')
@@ -42,6 +57,7 @@ app.post('/campgrounds', (req, res) => {
     if (err) {
       console.log(err)
     } else {
+      console.log(newCreated)
       res.redirect('/campgrounds')
     }
   })
@@ -91,6 +107,26 @@ app.post('/campgrounds/:id/comments', (req, res) => {
   })
 })
 
+app.get('/register', (req, res) => {
+  res.render('register')
+})
+
+app.post('/register', (req, res) => {
+  User.register(
+    new User({username: req.body.username}),
+    req.body.password,
+    (err, user) => {
+      if (err) {
+        console.log(err)
+        return res.redirect('/register')
+      }
+      console.log(user)
+      passport.authenticate('local')(req, res, () => {
+        res.redirect('/campgrounds')
+      })
+    }
+  )
+})
 app.listen(8080, '127.0.0.1', () => {
   console.log('Server is running...')
 })
