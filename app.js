@@ -127,6 +127,18 @@ app.post('/register', (req, res) => {
     }
   )
 })
+
+app.get('/login', (req, res) => {
+  res.render('login')
+})
+
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/campgrounds',
+  failureRedirect: '/login'
+}), () => {
+  //do nothing
+})
+
 app.listen(8080, '127.0.0.1', () => {
   console.log('Server is running...')
 })
