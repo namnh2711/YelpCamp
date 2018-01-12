@@ -11,6 +11,13 @@ const campgroundSchema = mongoose.Schema({
       ref: 'Comment',
     }
   ],
+  author: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    username: String
+  }
 }, { usePushEach: true })
 
 module.exports = mongoose.model('Campground', campgroundSchema)
