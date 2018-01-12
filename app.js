@@ -4,13 +4,13 @@ const mongoose = require('mongoose')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('./models/user')
-const seedDB = require('./seeds')
+// const seedDB = require('./seeds')
 
 const campgroundRoutes = require('./routes/campgrounds')
 const commentRoutes = require('./routes/comments')
 const indexRoutes = require('./routes/index')
 
-seedDB()
+// seedDB() // seed the database
 const app = express()
 // native ES6 promises
 mongoose.Promise = global.Promise

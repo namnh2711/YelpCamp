@@ -30,6 +30,9 @@ router.post('/', isLoggedIn, (req, res) => {
           console.log(err)
           res.redirect('/campgrounds/' + req.params.id)
         } else {
+          comment.author.id = req.user._id
+          comment.author.username = req.user.username
+          comment.save()
           campground.comments.push(comment._id)
           campground.save()
           res.redirect('/campgrounds/' + req.params.id)
