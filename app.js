@@ -3,14 +3,16 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
+const methodOverride = require('method-override')
+
 const User = require('./models/user')
-// const seedDB = require('./seeds')
+const seedDB = require('./seeds')
 
 const campgroundRoutes = require('./routes/campgrounds')
 const commentRoutes = require('./routes/comments')
 const indexRoutes = require('./routes/index')
 
-// seedDB() // seed the database
+seedDB() // seed the database
 const app = express()
 // native ES6 promises
 mongoose.Promise = global.Promise
@@ -30,6 +32,8 @@ app.use(require('express-session')({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(methodOverride('_method'))
+
 passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
